@@ -12,25 +12,25 @@ Verwendetes Image: `synesthesiam/coqui-tts`
 ```bash
 python test.py
 
-➡ Erstellt output/voix.wav aus dem eingegebenen Text.
+**➡ Erstellt output/voix.wav aus dem eingegebenen Text.
 
 3. Stimmenklonung (Beispielstimme + Text → geklonte Stimme)
-Eigenes Docker-Image erstellen:
+Eigenes Docker-Image erstellen:**
 
 ```bash
 docker build -t coqui-tts-custom .
 
 
-Test ausführen:
+**Test ausführen:**
 
 ```bash
 python test_clone.py
 
-➡ Nutzt samples/professeur.wav, um eine geklonte Stimme in output/ zu generieren.
+**➡ Nutzt samples/professeur.wav, um eine geklonte Stimme in output/ zu generieren.
 
 
 
- Beispiel (Python-Aufruf)
+ Beispiel (Python-Aufruf):**
 
 ```python
 from scripts.generate_voice import generiere_stimme
@@ -41,8 +41,8 @@ from scripts.generate_voice_clone import voix_clone
 voix_clone("professeur", "Heute lernen wir etwas über künstliche Intelligenz.")
  Ergebnisse
 
-Alle generierten .wav-Dateien befinden sich im Ordner output/.
+**Alle generierten .wav-Dateien befinden sich im Ordner output/.
 
 Voraussetzungen
 Docker
-Python 3.x
+Python 3.x**
