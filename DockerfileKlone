@@ -1,0 +1,19 @@
+FROM python:3.10-slim
+
+# Installer les dépendances système
+RUN apt-get update && apt-get install -y \
+    git \
+    espeak \
+    ffmpeg \
+    libsndfile1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Créer un dossier d'app
+WORKDIR /app
+
+# Installer Coqui TTS
+RUN pip install --upgrade pip
+RUN pip install TTS
+
+# Télécharger le modèle your_tts au premier démarrage (lazy load)
+ENTRYPOINT ["tts"]
