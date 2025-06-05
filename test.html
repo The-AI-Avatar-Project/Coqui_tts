@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Voice Cloning Demo</title>
+</head>
+<body>
+  <h1>Voice Cloning Test</h1>
+
+  <h2>Step 1: Upload Voice</h2>
+  <form id="cloneForm">
+    <label>User ID: <input type="text" name="user_id" required /></label><br><br>
+    <label>Audio File: <input type="file" name="audio" accept="audio/*" required /></label><br><br>
+    <button type="submit">Upload Voice</button>
+  </form>
+
+  <hr>
+
+  <h2>Step 2: Synthesize Speech</h2>
+  <form id="speakForm">
+    <label>User ID: <input type="text" name="user_id" required /></label><br><br>
+    <label>Language (e.g. en, de, fr): <input type="text" name="language" required /></label><br><br>
+    <label>Text: <textarea name="text" required></textarea></label><br><br>
+    <button type="submit">Speak</button>
+  </form>
+
+  <h3>Result:</h3>
+  <audio id="audioPlayer" controls style="display:none;"></audio><br>
+  <a id="downloadLink" href="#" download="synthesized.wav" style="display:none;">Download Synthesized Audio</a>
+
+  <script>
+    const cloneForm = document.getElementById('cloneForm');
+    const speakForm = document.getElementById('speakForm');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const downloadLink = document.getElementById('downloadLink');
+
+    const API_BASE = "http://127.0.0.1:8000"; // your FastAPI backend
+
+    cloneForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(cloneForm);
+      try {
+        const response = await fetch(`${API_BASE}/clone`, {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        alert(result.message || "Voice uploaded.");
+      } catch (err) {
+        alert("Upload failed: " + err.message);
+      }
+    };
+
+    speakForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(speakForm);
+      try {
+        const response = await fetch(`${API_BASE}/speak`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          alert(err.detail || "Error generating speech.");
+          return;
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        // Set audio player
+        audioPlayer.src = url;
+        audioPlayer.style.display = "block";
+        audioPlayer.play();
+
+        // Set download link
+        downloadLink.href = url;
+        downloadLink.style.display = "inline";
+      } catch (err) {
+        alert("Speaking failed: " + err.message);
+      }
+    };
+  </script>
+</body>
+</html>

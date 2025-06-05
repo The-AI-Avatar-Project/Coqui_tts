@@ -1,0 +1,18 @@
+services:
+  coqui_tts:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coqui-tts
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - COQUI_TOS_AGREED=1
+      - COQUI_NON_COMMERCIAL=1
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./profiles:/app/profiles
+      - ./coqui_cache:/root/.local/share/tts
+    working_dir: /app
+    entrypoint: ["python3", "main.py"]
